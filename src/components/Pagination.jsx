@@ -2,7 +2,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-const Pagination = ({ itemsCount, pageSize }) => {
+const Pagination = ({ itemsCount, pageSize, fetchPaginated }) => {
 
     const pageCount = Math.ceil(itemsCount / pageSize);    
     const pages = _.range(1, pageCount+1);
@@ -14,7 +14,7 @@ const Pagination = ({ itemsCount, pageSize }) => {
                 
                 {
                     pages.map( page => (
-                        <li key={page} className="page-item">
+                        <li key={page} className="page-item" onClick={() => fetchPaginated(page, pageSize )}>
                             <a className="page-link" href="#"> { page } </a>
                         </li>
                     ) )

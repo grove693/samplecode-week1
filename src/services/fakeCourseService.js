@@ -79,6 +79,13 @@ export function getCourses() {
   return courses;
 }
 
+export function getCoursesWithPagination(pageNumber, pageSize) {
+  const fromIndex = pageSize * (pageNumber - 1);
+  const toIndex = fromIndex + pageSize;
+
+  return courses.slice(fromIndex, toIndex);
+}
+
 // export function getCourse(id) {
 //   return courses.find(m => m._id === id);
 // }

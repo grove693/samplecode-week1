@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCourses } from '../services/fakeCourseService';
+import { getCourses, getCoursesWithPagination } from '../services/fakeCourseService';
 import Pagination from './Pagination';
 
 class Courses extends Component {
@@ -9,14 +9,16 @@ class Courses extends Component {
        // console.log('constructor')
         this.state = {
             courses : [],
+            allCourses: [],
             pageSize : 2
         }
     }
 
     componentDidMount(){
-       // console.log('componentDidMount()')
-        const courses = getCourses();
-        this.setState({  courses  })
+       console.log('componentDidMount()')
+        const courses = getCoursesWithPagination(1, this.state.pageSize);
+        const allCourses = getCourses();
+        this.setState({  courses, allCourses })
     }
 
     handleRemove = (courseId) => {
@@ -25,11 +27,18 @@ class Courses extends Component {
         this.setState({courses})
     }
 
-    render() {
-        //console.log('render()')
+    handlePaginationFetch = (pageNumber, pageSize) => {
+        const courses = getCoursesWithPagination(pageNumber, pageSize);
 
-        const { courses, pageSize } = this.state;
+        this.setState({courses})
+    }
+
+    render() {
+        console.log('render()')
+
+        const { courses, pageSize, allCourses } = this.state;
         const { length:count } = courses;
+        const { length:totalCoursesCount } = allCourses;
 
         if(count===0)
             return <p>No Courses yet!..</p>
@@ -73,8 +82,10 @@ class Courses extends Component {
                 </table>
 
                 <Pagination
-                    itemsCount={count}
-                    pageSize={pageSize} />
+                    itemsCount={totalCoursesCount}
+                    pageSize={pageSize}
+                    fetchPaginated={this.handlePaginationFetch}
+                    />
 
             </div>
         );
